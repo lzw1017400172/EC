@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>deehow-EDM-Service-Server</artifactId>
+	<name>${project.artifactId}</name>
+	<packaging>pom</packaging>
+	<url>http://maven.apache.org</url>
+	<parent>
+		<groupId>com.deehow</groupId>
+		<artifactId>deehow</artifactId>
+		<version>1.1.0</version>
+		<relativePath>./</relativePath>
+	</parent>
+	<modules>
+		<module>deehow-Common</module>
+		<module>deehow-EDM-Facade</module>
+		<module>deehow-EDM-Service</module>
+	</modules>
+	<!-- mvn启动命令 -->
+	<!-- clean package -P build tomcat7:run-war-only -f pom-edm-service-server.xml -->
+	
+	<!-- mvn打包命令 -->
+	<!-- mvn clean package -P build -f pom-edm-service-server.xml -->
+</project>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deehow.mapper.SysDeptMapper">
+
+  <select id="selectIdPage" resultType="java.lang.Long">
+		select id_ from sys_dept
+		<where>
+			<if test="cm.parentId != null">
+				and parent_id = #{cm.parentId}
+			</if>
+			<if test="cm.tenantId != null and cm.tenantId != ''">
+				and tenant_id = #{cm.tenantId}
+			</if>
+			<if test="cm.managerId != null and cm.managerId != ''">
+				and manager_id = #{cm.managerId}
+			</if>
+			<if test="cm.deptName != null and cm.deptName != ''">
+				and dept_name = #{cm.deptName}
+			</if>
+			<if test="cm.keyword != null and cm.keyword != ''">
+				and (dept_name like CONCAT('%',#{cm.keyword},'%'))
+			</if>
+		</where>
+	</select>
+	
+</mapper>

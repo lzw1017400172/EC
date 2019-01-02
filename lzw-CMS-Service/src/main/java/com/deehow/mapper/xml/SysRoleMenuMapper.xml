@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deehow.mapper.SysRoleMenuMapper">
+	<select id="selectIdPage" parameterType="java.util.Map" resultType="java.lang.Long">
+		SELECT id_ FROM sys_role_menu
+		<where>
+			<if test="cm.menuId != null and cm.menuId != ''">
+				 and menu_id = #{cm.menuId}
+			</if>
+			<if test="cm.roleId != null and cm.roleId != ''">
+				 and role_id = #{cm.roleId}
+			</if>
+		</where>
+	</select>
+	<select id="queryMenuIdsByRoleId" resultType="java.lang.Long">
+  	select distinct menu_id from sys_role_menu where role_id=#{roleId} and permission_='read'
+  </select>
+  <select id="queryPermissions" resultType="java.util.Map">
+  	select menu_id menuId,permission_ permission
+  	from sys_role_menu
+	where role_id=#{roleId}
+  </select>
+	<select id="queryPermission" resultType="java.lang.String">
+		select CONCAT(menu_name,'(', GROUP_CONCAT(code_text), ')')
+		from
+		sys_role_menu rm
+		join sys_menu m on rm.menu_id=m.id_
+		join sys_dic d on rm.permission_=d.code_ and d.type_='CRUD'
+		<where>
+			<if test="roleId != null">
+				rm.role_id=#{roleId}
+			</if>
+		</where>
+		group by menu_name
+		order by menu_id
+	</select>
+	  <select id="deleteRoleId">
+	  	delete from sys_role_menu where role_id=#{roleId}
+	  </select>
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+  	<insert id="insertAll">
+		INSERT INTO sys_role_menu (tenant_id,role_id,menu_id,permission_,create_by,create_time,update_by,update_time) values 
+		<foreach collection="list"	item="item" separator=",">
+			(#{item.tenantId},#{item.roleId},#{item.menuId},#{item.permission},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime})			
+		</foreach>
+	</insert>
+</mapper>

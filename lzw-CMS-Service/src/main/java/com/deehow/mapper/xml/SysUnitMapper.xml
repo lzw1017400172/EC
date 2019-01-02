@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deehow.mapper.SysUnitMapper">
+  <select id="selectIdPage" resultType="java.lang.Long">
+		select id_ from sys_unit
+		<where>
+			<if test="cm.phone != null and cm.phone != ''">
+				and phone_ = #{cm.phone}
+			</if>
+			<if test="cm.unitCode != null and cm.unitCode != ''">
+				and unit_code = #{cm.unitCode}
+			</if>
+			<if test="cm.unitName != null and cm.unitName != ''">
+				and unit_name = #{cm.unitName}
+			</if>
+			<if test="cm.applyId != null and cm.applyId != ''">
+				and apply_id = #{cm.applyId}
+			</if>
+		</where>
+	</select>
+	<select id="selectOperatingId" resultType="java.lang.Long">
+		select id_ from sys_unit where id_ not in (select unit_id from module_order   where module_order.operating_personnel !='0'
+			<if test="cm.operatingPersonnel != null and cm.operatingPersonnel != ''">
+		 		and module_order.operating_personnel!=#{cm.operatingPersonnel}
+			</if>
+			)
+	</select>
+</mapper>

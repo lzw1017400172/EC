@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deehow.mapper.DsProjectUserMapper">
+
+
+
+	<select id="selectIdPage" resultType="java.lang.Long">
+		select id_ from ds_project_user
+		<where>
+			<if test="cm.enable != null and cm.enable != ''">
+				 and ds_project_user.enable_ = #{cm.enable}
+			</if>
+			<if test="cm.fromTime != null and cm.fromTime != ''">
+				 and ds_project_user.create_time >= #{cm.fromTime}
+			</if>
+			<if test="cm.toTime != null and cm.toTime != ''">
+				 and ds_project_user.create_time &lt;= #{cm.toTime}
+			</if>
+			<if test="cm.keyword != null and cm.keyword != ''">
+				and (
+					or project_id like CONCAT('%',#{cm.keyword},'%')
+					or user_id like CONCAT('%',#{cm.keyword},'%')
+				)
+			</if>
+		</where>
+	</select>
+
+	<insert id="insertAll">
+		insert into ds_project_user (project_id,user_id,enable_,create_by,create_time,update_by,update_time)
+		values
+		<foreach collection="list" separator="," item="item">
+			(#{item.projectId},#{item.userId},#{item.enable},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime})
+		</foreach>
+	</insert>
+</mapper>

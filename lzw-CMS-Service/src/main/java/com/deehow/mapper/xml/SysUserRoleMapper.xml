@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deehow.mapper.SysUserRoleMapper">
+
+  	<select id="selectIdPage" parameterType="java.util.Map" resultType="java.lang.Long">
+		SELECT id_ FROM sys_user_role
+		<where>
+			<if test="cm.userId != null and cm.userId != ''">
+				 and user_id = #{cm.userId}
+			</if>
+			<if test="cm.roleId != null and cm.roleId != ''">
+				 and role_id = #{cm.roleId}
+			</if>
+		</where>
+		ORDER BY id_ DESC
+	</select>
+
+	<select id="queryRoleIdListByUserId" resultType="java.lang.Long">
+		SELECT role_id FROM sys_user_role
+		<where>
+			<if test="userId != null and userId != ''">
+				 and user_id = #{userId}
+			</if>
+		</where>
+	</select>
+
+
+	<select id="queryUserIdListByRoleId" resultType="java.lang.Long">
+		SELECT user_id FROM sys_user_role WHERE role_id = #{roleId}
+	</select>
+
+	<select id="queryUserIdListByRoleIdList" resultType="java.lang.Long">
+		SELECT distinct user_id FROM sys_user_role WHERE role_id in
+		<foreach collection="list" item="item" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	
+	
+	<select id="deleteRoleId">
+	  	delete from sys_user_role where role_id=#{roleId}
+	</select>
+	
+
+
+
+	<insert id="insertAll">
+		INSERT INTO sys_user_role (tenant_id,user_id,role_id,create_by,create_time,update_by,update_time) values 
+		<foreach collection="list"	item="item" separator=",">
+			(#{item.tenantId},#{item.userId},#{item.roleId},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime})			
+		</foreach>
+	</insert>
+	
+</mapper>

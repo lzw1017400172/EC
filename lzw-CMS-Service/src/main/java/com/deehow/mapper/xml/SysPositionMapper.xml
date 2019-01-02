@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deehow.mapper.SysPositionMapper">
+	<select id="selectIdPage" resultType="java.lang.Long">
+		select id_ from sys_position
+		<where>
+			<if test="cm.positionTitle != null and cm.positionTitle != ''">
+				and position_title = #{cm.positionTitle}
+			</if>
+			<if test="cm.positionNo != null and cm.positionNo != ''">
+				and position_no = #{cm.positionNo}
+			</if>
+			<if test="cm.parentId != null and cm.parentId != ''">
+				and parent_id = #{cm.parentId}
+			</if>
+			<if test="cm.tenantId != null and cm.tenantId != ''">
+				and tenant_id = #{cm.tenantId}
+			</if>
+			<if test="cm.deptId != null and cm.deptId != ''">
+				and dept_id = #{cm.deptId}
+			</if>
+			<if test="cm.keyword != null and cm.keyword != ''">
+				and (position_title like CONCAT('%',#{cm.keyword},'%'))
+			</if>
+			<if test="cm.noUnique != null and cm.noUnique != ''">
+				or (position_no = #{cm.noUnique} and tenant_id = #{cm.tenantId}) 
+			</if>
+			<if test="cm.positionTitleRepair != null and cm.positionTitleRepair != ''">
+				and position_title like CONCAT('%',#{cm.positionTitleRepair},'%') and position_title like '%维修%'
+			</if>
+		</where>
+	</select>
+	
+	<select id="listByIds" parameterType="java.util.Map"  resultType="java.lang.Long">
+		SELECT id_ FROM sys_position
+		<where>
+			<if test="cm.ids != null ">
+				and  id_ in
+				  <foreach collection="cm.ids" item="item" index="index" open="(" separator=","  close=")">  
+				  		#{item}
+				  </foreach>
+			</if>
+		</where>
+		
+	</select>
+</mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans" xmlns:p="http://www.springframework.org/schema/p"
+	 xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd  
+       http://www.springframework.org/schema/context  
+       http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+	
+    <bean id="wsQrRedisMessageListener" class="com.deehow.core.listener.WsQrRedisMessageListener">
+    	<property name="redisTemplate" ref="redisTemplate"></property>  
+    </bean>  
+
+    <bean id="redisContainer" class="org.springframework.data.redis.listener.RedisMessageListenerContainer">
+        <property name="connectionFactory" ref="jedisConnectionFactory" />
+        <property name="messageListeners">
+            <map>
+                <entry key-ref="wsQrRedisMessageListener">
+                    <list>
+                        <!-- 普通订阅，订阅具体的频道 -->
+                        <bean class="org.springframework.data.redis.listener.ChannelTopic">
+                            <constructor-arg value="${ws.topic.channel}" />
+                        </bean>
+                        <!-- 模式订阅，支持模式匹配订阅，*为模糊匹配符 -->
+                        <!-- <bean class="org.springframework.data.redis.listener.PatternTopic">
+                            <constructor-arg value="topic.*" />
+                        </bean> -->
+                        <!-- 匹配所有频道 -->
+                        <!-- <bean class="org.springframework.data.redis.listener.PatternTopic">
+                            <constructor-arg value="*" />
+                        </bean> -->
+                    </list>
+                </entry>
+            </map>
+        </property>
+    </bean>
+</beans>

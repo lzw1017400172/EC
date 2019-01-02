@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${package.Mapper}.${table.mapperName}">
+#if(${enableCache})
+	<!-- 开启二级缓存 -->
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+#end
+
+#if(${baseResultMap})
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="${package.Entity}.${entity}">
+#foreach($field in ${table.fields})
+#if(${field.keyFlag})
+		<id column="${field.name}" property="${field.propertyName}" />
+#else
+		<result column="${field.name}" property="${field.propertyName}" />
+#end
+#end
+	</resultMap>
+#end
+
+#if(${baseColumnList})
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ${table.fieldNames}
+    </sql>
+#end
+
+	<select id="selectIdPage" resultType="java.lang.Long">
+		select id_ from ${table.name} where ${table.name}.enable_ = 1
+			<if test="cm.tenantId != null and cm.tenantId != ''">
+				 and ${table.name}.tenant_id = #{cm.tenantId}
+			</if>
+			<if test="cm.enable != null and cm.enable != ''">
+				 and ${table.name}.enable_ = #{cm.enable}
+			</if>
+			<if test="cm.createBy != null and cm.createBy != ''">
+				 and ${table.name}.create_by = #{cm.createBy}
+			</if>
+			<if test="cm.createTime != null and cm.createTime != ''">
+				 and ${table.name}.create_time like CONCAT(#{cm.createTime},'%')
+			</if>
+			<if test="cm.updateBy != null and cm.updateBy != ''">
+				 and ${table.name}.update_by = #{cm.updateBy}
+			</if>
+			<if test="cm.updateTime != null and cm.updateTime != ''">
+				 and ${table.name}.update_time like CONCAT(#{cm.updateTime},'%')
+			</if>
+			<if test="cm.fromTime != null and cm.fromTime != ''">
+				 and ${table.name}.create_time >= #{cm.fromTime}
+			</if>
+			<if test="cm.toTime != null and cm.toTime != ''">
+				 and ${table.name}.create_time &lt;= #{cm.toTime}
+			</if>
+			<if test="cm.keyword != null and cm.keyword != ''">
+				and (
+#foreach($field in ${table.fields})
+					or ${field.name} like CONCAT('%',#{cm.keyword},'%')
+#end
+				)
+			</if>
+	</select>
+</mapper>

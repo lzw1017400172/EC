@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deehow.mapper.TaskFireLogMapper">
+	<select id="selectIdByMap" resultType="java.lang.Long">
+		select id_ from task_fire_log
+		<where>
+			<if test="cm.groupName != null and cm.groupName != ''">
+				and  group_name = #{cm.groupName}
+			</if>
+			<if test="cm.taskName != null and cm.taskName != ''">
+				and  task_name = #{cm.taskName}
+			</if>
+			<if test="cm.status != null and cm.status != ''">
+				and  status_ = #{cm.status}
+			</if>
+			<if test="cm.startTime != null and cm.startTime != ''">
+				and  start_time like CONCAT(#{cm.startTime},'%')
+			</if>
+			<if test="cm.endTime != null and cm.endTime != ''">
+				and  end_time like CONCAT(#{cm.endTime},'%')
+			</if>
+		</where>
+		ORDER BY start_time DESC
+	</select>
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deehow.mapper.DsTaskMapper">
+
+
+
+	<select id="selectIdPage" resultType="java.lang.Long">
+		select id_ from ds_task
+		<where>
+			<if test="cm.enable != null and cm.enable != ''">
+				 and ds_task.enable_ = #{cm.enable}
+			</if>
+			<if test="cm.fromTime != null and cm.fromTime != ''">
+				 and ds_task.create_time >= #{cm.fromTime}
+			</if>
+			<if test="cm.toTime != null and cm.toTime != ''">
+				 and ds_task.create_time &lt;= #{cm.toTime}
+			</if>
+			<if test="cm.keyword != null and cm.keyword != ''">
+				and (
+					or name_ like CONCAT('%',#{cm.keyword},'%')
+					or leader_ like CONCAT('%',#{cm.keyword},'%')
+					or progress_bar like CONCAT('%',#{cm.keyword},'%')
+					or start_time like CONCAT('%',#{cm.keyword},'%')
+					or end_time like CONCAT('%',#{cm.keyword},'%')
+					or type_ like CONCAT('%',#{cm.keyword},'%')
+				)
+			</if>
+		</where>
+	</select>
+</mapper>

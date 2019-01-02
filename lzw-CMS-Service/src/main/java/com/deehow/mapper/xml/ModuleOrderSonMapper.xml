@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deehow.mapper.ModuleOrderSonMapper">
+
+
+
+	<select id="selectIdPage" resultType="java.lang.Long">
+		select id_ from module_order_son where module_order_son.enable_ = 1
+			<if test="cm.tenantId != null and cm.tenantId != ''">
+				 and module_order_son.tenant_id = #{cm.tenantId}
+			</if>
+			<if test="cm.enable != null and cm.enable != ''">
+				 and module_order_son.enable_ = #{cm.enable}
+			</if>
+			<if test="cm.createBy != null and cm.createBy != ''">
+				 and module_order_son.create_by = #{cm.createBy}
+			</if>
+			<if test="cm.createTime != null and cm.createTime != ''">
+				 and module_order_son.create_time like CONCAT(#{cm.createTime},'%')
+			</if>
+			<if test="cm.updateBy != null and cm.updateBy != ''">
+				 and module_order_son.update_by = #{cm.updateBy}
+			</if>
+			<if test="cm.updateTime != null and cm.updateTime != ''">
+				 and module_order_son.update_time like CONCAT(#{cm.updateTime},'%')
+			</if>
+			<if test="cm.fromTime != null and cm.fromTime != ''">
+				 and module_order_son.create_time >= #{cm.fromTime}
+			</if>
+			<if test="cm.toTime != null and cm.toTime != ''">
+				 and module_order_son.create_time &lt;= #{cm.toTime}
+			</if>
+			<if test="cm.keyword != null and cm.keyword != ''">
+				and (
+					or model_name like CONCAT('%',#{cm.keyword},'%')
+					or model_id like CONCAT('%',#{cm.keyword},'%')
+					or number_ like CONCAT('%',#{cm.keyword},'%')
+					or price_ like CONCAT('%',#{cm.keyword},'%')
+					or rebate_ like CONCAT('%',#{cm.keyword},'%')
+					or payment_method like CONCAT('%',#{cm.keyword},'%')
+					or final_price like CONCAT('%',#{cm.keyword},'%')
+					or expiry_time like CONCAT('%',#{cm.keyword},'%')
+					or order_id like CONCAT('%',#{cm.keyword},'%')
+				)
+			</if>
+	</select>
+</mapper>

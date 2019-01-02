@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deehow.mapper.SysModelMapper">
+
+	<select id="selectIdPage" resultType="java.lang.Long">
+		select id_ from sys_model
+		<where>
+			<if test="cm.enabled != null">
+				and enabled = #{cm.enabled}
+			</if>
+			<if test="cm.isBasic != null">
+				and is_basic = #{cm.isBasic}
+			</if>
+			<if test="cm.enable != null and cm.enable">
+				and enable_ = #{cm.enable}
+			</if>
+			<if test="cm.type != null and cm.type">
+				and type = #{cm.type}
+			</if>
+			<if test="cm.keyword != null and cm.keyword != ''">
+				and (
+					or model_no like CONCAT('%',#{cm.keyword},'%')
+					or model_logo like CONCAT('%',#{cm.keyword},'%')
+					or model_name like CONCAT('%',#{cm.keyword},'%')
+					or model_url like CONCAT('%',#{cm.keyword},'%')
+					or enabled like CONCAT('%',#{cm.keyword},'%')
+					or is_basic like CONCAT('%',#{cm.keyword},'%')
+					or pub_time like CONCAT('%',#{cm.keyword},'%')
+					or sort like CONCAT('%',#{cm.keyword},'%')
+					or price like CONCAT('%',#{cm.keyword},'%')
+				)
+			</if>
+		</where>
+	</select>
+
+
+
+
+
+	<!-- <select id="selectIdPhonePage" resultType="java.lang.Long">
+		SELECT sm.id_ FROM sys_model sm INNER JOIN sys_tenant_model stm  ON (sm.id_ = stm.model_id)
+		WHERE stm.model_validate > NOW() AND sm.enable_ = 1
+		<if test="cm.tenantId != null and cm.tenantId != ''">
+			and stm.tenant_id = #{cm.tenantId}
+		</if>
+		<if test="cm.modelName != null and cm.modelName != ''">
+			and sm.model_name = #{cm.modelName}
+		</if>
+	</select>
+
+	<select id="selectIdMinePage" resultType="java.lang.Long">
+		SELECT sm.id_ FROM sys_model sm INNER JOIN sys_tenant_model stm  ON (sm.id_ = stm.model_id)
+			INNER JOIN sys_model_phone_user smpu ON (stm.model_id = smpu.model_id AND stm.tenant_id = smpu.tenant_id)
+		WHERE stm.model_validate > NOW() AND sm.enable_ = 1
+		<if test="cm.tenantId != null and cm.tenantId != ''">
+			and stm.tenant_id = #{cm.tenantId}
+		</if>
+		<if test="cm.userId != null and cm.userId != ''">
+			and smpu.user_id = #{cm.userId}
+		</if>
+	</select> -->
+	<select id="selectModelByIds" resultType="com.deehow.model.SysModel">
+		select id_ id,model_no modelNo,model_logo modelLogo,model_name modelName,model_url modelUrl,model_desc,sm.desc,model_lable,model_info,enabled,is_basic isBasic,type,pub_time pubTime,sort,price,enable_ enable,remark_ remark from sys_model sm
+		<where>
+			<if test="cm.ids != null and cm.ids!=''">
+				and id_ in (${cm.ids})
+			</if>
+		</where>
+	</select>
+</mapper>

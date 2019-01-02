@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deehow.mapper.DsDiagramItemMapper">
+
+
+
+	<select id="selectIdPage" resultType="java.lang.Long">
+		select id_ from ds_diagram_item
+		<where>
+			<if test="cm.taskId != null and cm.taskId != ''">
+				 and ds_diagram_item.task_id = #{cm.taskId}
+			</if>
+		</where>
+	</select>
+</mapper>

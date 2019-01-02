@@ -1,0 +1,3 @@
+upload/imageData
+/file/view
+/file/download

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deehow.mapper.SysTenantModelMapper">
+	
+	<select id="selectIdPage" resultType="java.lang.Long">
+		select id_ from sys_tenant_model 
+		<where>
+			<if test="cm.tenantId != null and cm.tenantId != ''">
+				and tenant_id = #{cm.tenantId}
+			</if>
+			<if test="cm.modelId != null and cm.modelId != ''">
+				and model_id = #{cm.modelId}
+			</if>
+		</where>
+	</select>
+	
+	
+	<!-- <select id="selectIdPage" resultType="java.lang.Long">
+		select id_ from sys_tenant_model where  model_validate >= now()
+			<if test="cm.tenantId != null and cm.tenantId != ''">
+				and tenant_id = #{cm.tenantId}
+			</if>
+			<if test="cm.modelId != null and cm.modelId != ''">
+				and model_id = #{cm.modelId}
+			</if>
+	</select>
+	
+	<select id="queryListByModelType" resultType="java.lang.Long">
+		SELECT DISTINCT sys_model.id_ FROM sys_model LEFT JOIN sys_tenant_model ON sys_tenant_model.model_id = sys_model.id_ WHERE model_validate >= NOW()
+			<if test="cm.tenantId != null and cm.tenantId != ''">
+				AND sys_tenant_model.tenant_id = #{cm.tenantId}
+			</if>
+			<if test="cm.type != null and cm.type != ''">
+				AND sys_model.type = #{cm.type}
+			</if>
+	</select>
+	
+
+	
+	<select id="readIdPage" resultType="java.lang.Long">
+		select id_ from sys_tenant_model
+		<where>
+			<if test="cm.tenantId != null and cm.tenantId != ''">
+				and tenant_id = #{cm.tenantId}
+			</if>
+			<if test="cm.modelId != null and cm.modelId != ''">
+				and model_id = #{cm.modelId}
+			</if>
+			<if test="cm.buy == 0 or (cm.buy != null and cm.buy != '')">
+				and buy = #{cm.buy}
+			</if>
+			<if test="cm.modelValidate != null and cm.modelValidate != ''">
+				and model_validate like CONCAT(#{cm.modelValidate},'%')
+			</if>
+		</where>
+	</select> -->
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<select id="queryMidMvByTenantId" resultType="com.deehow.model.SysMidMvDTO">
+		SELECT model_id modelId,model_validate modelValidate,enable_ enable FROM sys_tenant_model 
+		<where>
+			<if test="cm.tenantId != null and cm.tenantId != ''">
+				AND tenant_id = #{cm.tenantId}
+			</if>
+		</where>
+	</select>
+	
+	
+	
+	
+</mapper>

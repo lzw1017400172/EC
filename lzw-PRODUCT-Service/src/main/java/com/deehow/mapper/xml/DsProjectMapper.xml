@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deehow.mapper.DsProjectMapper">
+
+
+	<sql id="pageCondition">
+		<if test="cm.enable != null and cm.enable != ''">
+			and dp.enable_ = #{cm.enable}
+		</if>
+		<if test="cm.createBy != null and cm.createBy != ''">
+			and dp.create_by = #{cm.createBy}
+		</if>
+		<if test="cm.fromTime != null and cm.fromTime != ''">
+			and dp.create_time >= #{cm.fromTime}
+		</if>
+		<if test="cm.toTime != null and cm.toTime != ''">
+			and dp.create_time &lt;= #{cm.toTime}
+		</if>
+
+
+		<if test="cm.projectTypeId != null and cm.projectTypeId != ''">
+			and dp.project_type_id = #{cm.projectTypeId}
+		</if>
+
+	</sql>
+
+	<select id="selectIdPage" resultType="java.lang.Long">
+		select id_ from ds_project  dp
+		<where>
+            <include refid="pageCondition"/>
+		</where>
+	</select>
+
+    <select id="selectCountByPageCondition" resultType="java.lang.Integer">
+        SELECT count(*) FROM `ds_project` dp
+        <where>
+            <include refid="pageCondition"/>
+        </where>
+    </select>
+
+    <select id="selectModelPage" resultMap="selectModelPageResultMap">
+        select aaaa.`id`,bbbb.user_id uid from (SELECT dp.`id_` `id` FROM `ds_project` dp
+        <where>
+            <include refid="pageCondition"/>
+        </where>
+        ORDER BY dp.`id_` DESC LIMIT ${cm.offset},${cm.limit}) as aaaa
+        left join `ds_project_user` bbbb ON aaaa.id = bbbb.project_id
+    </select>
+
+    <resultMap id="selectModelPageResultMap" type="com.deehow.model.DsProject">
+        <id column="id" property="id"/>
+        <collection property="participants" ofType="java.lang.Long">
+            <result column="uid"/>
+        </collection>
+    </resultMap>
+</mapper>

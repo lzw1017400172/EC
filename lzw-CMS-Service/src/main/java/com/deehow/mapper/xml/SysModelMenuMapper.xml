@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deehow.mapper.SysModelMenuMapper">
+
+   <resultMap id="BaseResultMap" type="com.deehow.model.SysModelMenu">
+        <result column="id_" property="id" />
+		<result column="model_id" property="modelId" />
+		<result column="model_name" property="modelName" />
+		<result column="menu_name" property="menuName" />
+		<result column="menu_order" property="menuOrder" />
+		<result column="menu_url" property="menuUrl" />
+		<result column="parent_id" property="parentId" />
+		<result column="create_date" property="createDate" />
+		<result column="menu_icon" property="menuIcon" />
+		<result column="access_str" property="accessStr" />
+		<result column="remark_" property="remark" />
+		<result column="enable_" property="enable" />
+		<result column="checked_" property="checked" />
+		<result column="permstring" property="permstring" />
+	</resultMap>
+
+
+	<select id="selectIdPage" resultType="java.lang.Long">
+		select id_ from sys_model_menu
+		<where>
+			<if test="cm.modelId != null">
+				and model_id = #{cm.modelId}
+			</if>
+			<if test="cm.parentId != null">
+				AND parent_id = #{cm.parentId}
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectIdByModelIds" parameterType="java.util.List" resultType="java.lang.Long">
+		select id_ from sys_model_menu
+		WHERE model_id IN 
+            <foreach item="item" collection="list" open="(" separator="," close=")">
+					#{item}
+			</foreach>
+		ORDER BY menu_order
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- <select id="selectIdByMap" resultType="java.lang.Long">
+		SELECT id_ FROM sys_model_menu
+		<where>
+			<if test="cm.parentId != null">
+				AND parent_id = #{cm.parentId}
+			</if>
+			<if test="cm.modelIds != null and cm.modelIds.size > 0">
+				AND model_id IN
+				<foreach item="item" collection="cm.modelIds" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+		ORDER BY menu_order
+	</select>
+	
+	<select id="selectMenuByModelIdsAndUserId" parameterType="java.util.Map" resultMap="BaseResultMap">
+		SELECT   mm.*, (CASE  WHEN um.id_ IS NOT NULL THEN 'checked' ELSE 'unchecked' END) checked_
+	    FROM
+	    sys_model_menu mm  LEFT JOIN sys_user_menu um ON mm.id_ = um.menu_id AND um.user_id = #{selectUserId}
+	    WHERE
+	    mm.model_id IN
+	    <foreach item="item" index="index" collection="modelIds" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		order by mm.model_id , mm.parent_id , mm.menu_order
+	</select>
+	<select  id="selectMenuByRole" parameterType="java.util.Map" resultMap="BaseResultMap">
+		 SELECT   mm.*, (CASE  WHEN perm.meid IS NOT NULL THEN 'checked' ELSE 'unchecked' END) checked_,perm.permstring
+	    FROM
+	    sys_model_menu mm 
+	   LEFT JOIN (SELECT meid,permstring FROM( SELECT sys_role_menu.menu_id meid,GROUP_CONCAT(`sys_role_menu`.permission_ ORDER BY `sys_role_menu`.create_time DESC SEPARATOR ',') permstring
+		FROM `sys_role_menu` WHERE sys_role_menu.role_id = #{roleId} GROUP BY `sys_role_menu`.menu_id)w) perm ON perm.meid=  mm.id_
+	   	    WHERE
+	    mm.model_id IN
+	    <foreach item="item" index="index" collection="modelIds" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		ORDER BY mm.model_id , mm.parent_id , mm.menu_order
+	</select> -->
+</mapper>

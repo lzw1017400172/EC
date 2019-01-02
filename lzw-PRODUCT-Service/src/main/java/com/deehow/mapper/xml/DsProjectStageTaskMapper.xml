@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deehow.mapper.DsProjectStageTaskMapper">
+
+
+
+	<select id="selectIdPage" resultType="java.lang.Long">
+		select id_ from ds_project_stage_task
+		<where>
+			<if test="cm.projectId != null and cm.projectId != ''">
+				 and ds_project_stage_task.project_id = #{cm.projectId}
+			</if>
+            <if test="cm.taskId != null and cm.taskId != ''">
+                and ds_project_stage_task.task_id = #{cm.taskId}
+            </if>
+            <if test="cm.stageId != null and cm.stageId != ''">
+                and ds_project_stage_task.stage_id = #{cm.stageId}
+            </if>
+  		</where>
+	</select>
+
+
+	<select id="selectStageProgressBarByTaskId" resultType="com.deehow.model.DsStage" >
+        SELECT spst1.`stage_id` id,ROUND(SUM(dt.`progress_bar`)/(COUNT(spst2.`task_id`)*100),2)*100 progressBar
+        FROM `ds_project_stage_task` spst1 INNER JOIN `ds_project_stage_task` spst2  ON spst1.`stage_id` = spst2.`stage_id` AND spst1.`project_id` = spst2.`project_id`
+        INNER JOIN `ds_task` dt ON spst2.`task_id` = dt.`id_` WHERE spst1.`task_id` = #{taskId}  GROUP BY spst1.`stage_id`
+	</select>
+
+    <select id="selectProjectProgressBarByTaskId" resultType="com.deehow.model.DsProject" >
+        SELECT spst1.`project_id` id,ROUND(SUM(dt.`progress_bar`)/(COUNT(spst2.`task_id`)*100),2)*100 progressBar
+         FROM `ds_project_stage_task` spst1 INNER JOIN `ds_project_stage_task` spst2  ON spst1.`project_id` = spst2.`project_id`
+        INNER JOIN `ds_task` dt ON spst2.`task_id` = dt.`id_` WHERE spst1.`task_id` = #{taskId}  GROUP BY spst1.`project_id`
+	</select>
+
+    <select id="selectStageProgressBarByProjectIdAndStageId" resultType="com.deehow.model.DsStage" >
+        SELECT spst.`stage_id` id,ROUND(SUM(dt.`progress_bar`)/(COUNT(spst.`task_id`)*100),2)*100 progressBar
+          FROM `ds_project_stage_task` spst INNER JOIN `ds_task` dt ON spst.`task_id` = dt.`id_`
+         WHERE spst.`project_id` = #{projectId} AND spst.`stage_id` = #{stageId}  GROUP BY spst.`stage_id`
+	</select>
+
+    <select id="selectProjectProgressBarByProjectId" resultType="com.deehow.model.DsProject" >
+        SELECT spst.`project_id` id,ROUND(SUM(dt.`progress_bar`)/(COUNT(spst.`task_id`)*100),2)*100 progressBar
+         FROM `ds_project_stage_task` spst INNER JOIN `ds_task` dt ON spst.`task_id` = dt.`id_`
+          WHERE spst.`project_id` = #{projectId}  GROUP BY spst.`project_id`
+	</select>
+
+
+    <select id="selectTree" resultType="com.deehow.model.DsProjectStageTask">
+        select id_ id,stage_id stageId,task_id taskId,sort_ sort  from ds_project_stage_task
+        <where>
+            <if test="cm.projectId != null and cm.projectId != ''">
+                and project_id = #{cm.projectId}
+            </if>
+        </where>
+        order by sort_
+    </select>
+</mapper>

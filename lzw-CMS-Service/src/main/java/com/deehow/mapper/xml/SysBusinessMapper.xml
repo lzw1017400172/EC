@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deehow.mapper.SysBusinessMapper">
+	<select id="selectIdPage" resultType="java.lang.Long">
+		select sys_business.id_ from sys_business WHERE sys_business.enable_=1
+			<if test="cm.tenantId != null and cm.tenantId != ''">
+				 and sys_business.tenant_id = #{cm.tenantId}
+			</if>
+			<if test="cm.id != null and cm.id != ''">
+				 and sys_business.id_ = #{cm.id}
+			</if>
+			<if test="cm.name != null and cm.name != ''">
+				 and sys_business.name = #{cm.name}
+			</if>
+			ORDER BY sys_business.sort,sys_business.create_time
+	</select>
+</mapper>

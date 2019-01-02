@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.deehow.mapper.ModuleOrderMapper">
+
+
+
+	<select id="selectIdPage" resultType="java.lang.Long">
+		select id_ from module_order where module_order.enable_ = 1
+			<if test="cm.enable != null and cm.enable != ''">
+				 and module_order.enable_ = #{cm.enable}
+			</if>
+			<if test="cm.createBy != null and cm.createBy != ''">
+				 and module_order.create_by = #{cm.createBy}
+			</if>
+			<if test="cm.createTime != null and cm.createTime != ''">
+				 and module_order.create_time like CONCAT(#{cm.createTime},'%')
+			</if>
+			<if test="cm.updateBy != null and cm.updateBy != ''">
+				 and module_order.update_by = #{cm.updateBy}
+			</if>
+			<if test="cm.updateTime != null and cm.updateTime != ''">
+				 and module_order.update_time like CONCAT(#{cm.updateTime},'%')
+			</if>
+			<if test="cm.fromTime != null and cm.fromTime != ''">
+				 and module_order.create_time >= #{cm.fromTime}
+			</if>
+			<if test="cm.toTime != null and cm.toTime != ''">
+				 and module_order.create_time &lt;= #{cm.toTime}
+			</if>
+			<if test="cm.operatingPersonnel != null and cm.operatingPersonnel != ''">
+				 and module_order.operating_personnel = #{cm.operatingPersonnel}
+			</if>
+			<if test="cm.unitName != null and cm.unitName != ''">
+				 and module_order.unit_name like CONCAT('%',#{cm.unitName},'%')
+			</if>
+			<if test="cm.unitCode != null and cm.unitCode != ''">
+				 and module_order.unit_code like CONCAT('%',#{cm.unitCode},'%')
+			</if>
+			<if test="cm.unitId != null and cm.unitId != ''">
+				 and module_order.unit_id = #{cm.unitId}
+			</if>
+			<if test="cm.phone != null and cm.phone != ''">
+				 and module_order.phone like CONCAT('%',#{cm.phone},'%')
+			</if>
+			<if test="cm.validityTime != null and cm.validityTime != ''">
+				 and module_order.validity_time like CONCAT('%',#{cm.validityTime},'%')
+			</if>
+			<if test="cm.personNum != null and cm.personNum != ''">
+				 and module_order.person_num = #{cm.personNum}
+			</if>
+			<if test="cm.orderNo != null and cm.orderNo != ''">
+				 and module_order.order_no = #{cm.orderNo}
+			</if>
+			<if test="cm.oPersonnel != null and cm.oPersonnel != ''">
+				 and module_order.operating_personnel != #{cm.oPersonnel}
+			</if>
+			<if test="cm.keyword != null and cm.keyword != ''">
+				and (
+					or unit_id like CONCAT('%',#{cm.keyword},'%')
+					or unit_name like CONCAT('%',#{cm.keyword},'%')
+					or unit_code like CONCAT('%',#{cm.keyword},'%')
+					or order_no like CONCAT('%',#{cm.keyword},'%')
+					or sum_ like CONCAT('%',#{cm.keyword},'%')
+					or operating_personnel like CONCAT('%',#{cm.keyword},'%')
+				)
+			</if>
+			order by update_time desc
+	</select>
+	
+</mapper>
